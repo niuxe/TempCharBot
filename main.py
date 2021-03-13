@@ -53,5 +53,11 @@ async def unsubscribe(ctx, game):
     await ctx.send("{} is now unsubscribed to {}".format(ctx.message.author.name, game))
 
 
+@bot.command()
+@commands.is_owner()
+async def shutdown(ctx):
+    await ctx.bot.logout()
+
+
 if __name__ == "__main__":
     bot.run(config('TOKEN'))
