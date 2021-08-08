@@ -6,7 +6,7 @@ from decouple import config
 from discord.ext import commands
 
 
-"""Allowing the bot to access the list of memebers"""
+"""Allowing the bot to access the list of members"""
 intents = discord.Intents.default()
 intents.members = True
 
@@ -35,12 +35,24 @@ async def quote(ctx):
 
 
 @bot.command()
-async def add_quote(ctx, new_quote):
-    if re.match(r'[\w\s]+-\s[\w]+\s\d{4}', new_quote):
-        await repository.add_quote(new_quote)
-        await ctx.send("Quote was added!")
-    else:
-        await ctx.send("Quote doesn't match the format. Should be: what they say - name year(e.g. 1234)")
+async def add_quote(ctx):
+    author = ctx.author
+    await ctx.message.delete()
+    await repository.dm_quote(author)
+
+    def check(m):
+        return m.channel == author.dm_channel and m.author == ctx.author
+
+    _quote = await bot.wait_for('message', check=check, timeout=30)
+    await repository.dm_name(author)
+
+    _name = await bot.wait_for('message', check=check, timeout=30)
+    await repository.dm_year(author)
+
+    _year = await bot.wait_for('message', check=check, timeout=30)
+
+    await repository.add_quote(_quote.content, _name.content, _year.content)
+    await author.send("Quote added")
 
 
 @bot.command()
