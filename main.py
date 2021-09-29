@@ -35,6 +35,11 @@ async def quote(ctx):
 
 
 @bot.command()
+async def all_quotes(ctx):
+    await ctx.send(repository.get_all_quotes())
+
+
+@bot.command()
 async def add_quote(ctx):
     author = ctx.author
     await ctx.message.delete()
