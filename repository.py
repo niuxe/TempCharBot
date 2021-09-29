@@ -58,7 +58,6 @@ def _edit_weights(json_object, number, file):
         json_object = _add_weights(json_object)
     else:
         json_object['quotes'][number][1] = weight-1
-    print(json_object)
     _save_data(json_object, file)
 
 
@@ -70,7 +69,6 @@ def _add_weights(json_object):
 
 def _save_data(json_object, file):
     file.seek(0)
-    print(json_object)
     json.dump(json_object, file, indent=4, ensure_ascii=False)
     file.truncate()
 
